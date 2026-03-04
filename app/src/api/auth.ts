@@ -219,8 +219,6 @@ export async function getAuthToken(): Promise<string | undefined> {
     return (await getStoredSessionToken()) || undefined;
 }
 
-// ── Password Reset ──────────────────────────────────────────────────
-
 export async function forgotPassword(email: string): Promise<string> {
     const res = await nativeFetch('/api/auth/forgot-password', {
         method: 'POST',
@@ -247,8 +245,6 @@ export async function resetPassword(resetToken: string, password: string): Promi
     });
     return res.data?.message || 'Password reset successfully';
 }
-
-// ── Account Deletion ────────────────────────────────────────────────
 
 export async function requestDeleteAccount(): Promise<string> {
     const res = await nativeFetch('/api/auth/request-delete-account', {

@@ -27,7 +27,6 @@ import { fetchCurrentUser } from '../api/auth';
 import { useAuth } from '../contexts/AuthContext';
 import { useNetwork } from '../contexts/NetworkContext';
 import { KeyboardSpacer } from '@/components/KeyboardSpacer';
-import { hasCompletedOnboarding } from '../api/user';
 import { ENV } from '../config/env';
 import { isNetworkError } from '../utils/networkError';
 
@@ -150,12 +149,6 @@ export default function LoginScreen() {
       }
       const user = await fetchCurrentUser();
       setUserContext(user);
-      const completed = await hasCompletedOnboarding();
-      if (!completed) {
-        router.replace('/onboarding');
-      } else {
-        navigateToHome();
-      }
     } catch (err: unknown) {
       const message = isNetworkError(err)
         ? "You're offline. Sign in when you're back online."
@@ -176,12 +169,6 @@ export default function LoginScreen() {
       }
       const user = await fetchCurrentUser();
       setUserContext(user);
-      const completed = await hasCompletedOnboarding();
-      if (!completed) {
-        router.replace('/onboarding');
-      } else {
-        navigateToHome();
-      }
     } catch (err: unknown) {
       const message = isNetworkError(err)
         ? "You're offline. Sign in when you're back online."

@@ -1,9 +1,6 @@
-import { Platform } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { nativeFetch } from './http';
 import { ENV } from '../config/env';
 import { getStoredSessionToken } from './auth';
-import { getIsOnline } from '../network/networkState';
 
 const ONBOARDING_COMPLETE_KEY = 'onboarding_complete';
 
@@ -60,78 +57,4 @@ export async function removeProfilePicture(): Promise<void> {
     method: 'DELETE',
     params: {},
   });
-}
-
-export async function updateUserPreferences(data: {
-  mode?: 'tennis' | 'pickleball' | 'padel';
-  statProfile?: 'basic' | 'intermediate' | 'advanced';
-}): Promise<void> {
-  await nativeFetch('/user/preferences', {
-    method: 'PATCH',
-    data,
-    params: {},
-  });
-}
-
-export async function requestParentalConsent(parentEmail: string): Promise<void> {
-  await nativeFetch('/user/parental-consent/request', {
-    method: 'POST',
-    data: { parentEmail: parentEmail.trim() },
-    params: {},
-  });
-}
-
-export async function hasCompletedOnboarding(): Promise<boolean> {
-  if (!getIsOnline()) {
-    return true;
-  }
-  try {
-    const response = await nativeFetch('/user/onboarding', {
-      method: 'GET',
-      params: {},
-    });
-    const completed = response.data?.completed === true;
-    if (completed && Platform.OS !== 'web') {
-      await AsyncStorage.setItem(ONBOARDING_COMPLETE_KEY, 'true');
-    }
-    if (!completed && Platform.OS !== 'web') {
-      try {
-        const local = await AsyncStorage.getItem(ONBOARDING_COMPLETE_KEY);
-        if (local === 'true') {
-          await markOnboardingComplete();
-          return true;
-        }
-      } catch {}
-    }
-    return completed;
-  } catch {
-    if (Platform.OS !== 'web') {
-      try {
-        const local = await AsyncStorage.getItem(ONBOARDING_COMPLETE_KEY);
-        if (local === 'true') {
-          markOnboardingComplete().catch(() => {});
-          return true;
-        }
-      } catch {}
-    }
-    return false;
-  }
-}
-
-export async function markOnboardingComplete(): Promise<void> {
-  // Always cache locally FIRST so onboarding never shows again,
-  // even if the server call fails (e.g., 401 race condition).
-  if (Platform.OS !== 'web') {
-    await AsyncStorage.setItem(ONBOARDING_COMPLETE_KEY, 'true');
-  }
-  if (!getIsOnline()) return;
-  try {
-    await nativeFetch('/user/onboarding', {
-      method: 'POST',
-      params: {},
-    });
-  } catch (error) {
-    // Don't throw — local flag is set, server will sync on next check.
-    console.warn('Failed to sync onboarding complete with server:', error);
-  }
 }

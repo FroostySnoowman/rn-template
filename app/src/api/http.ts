@@ -112,7 +112,6 @@ export async function nativeFetch(
     }
 
     if (!response.ok) {
-      // Preserve the full error response data for diagnostic purposes
       const errorMessage =
         typeof data === 'object'
           ? (data as any).error?.message || (data as any).error || (data as any).message || 'Request failed'
@@ -120,7 +119,7 @@ export async function nativeFetch(
       
       const error: any = new Error(typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : String(errorMessage));
       error.status = response.status;
-      error.data = data; // Preserve full response data including 'details'
+      error.data = data;
       error.response = { status: response.status, data };
       throw error;
     }

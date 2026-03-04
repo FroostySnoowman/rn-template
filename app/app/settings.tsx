@@ -100,7 +100,6 @@ export default function SettingsScreen() {
         bounces={Platform.OS === 'ios'}
       >
         <View style={{ maxWidth: 768, alignSelf: 'center', width: '100%' }}>
-          {/* General */}
           <View
             style={{
               backgroundColor: 'rgba(255,255,255,0.05)',
@@ -133,7 +132,6 @@ export default function SettingsScreen() {
             <SettingsRow icon="shield" label="Privacy" onPress={() => {}} isLast />
           </View>
 
-          {/* About */}
           <View
             style={{
               backgroundColor: 'rgba(255,255,255,0.05)',
@@ -165,7 +163,6 @@ export default function SettingsScreen() {
             <SettingsRow icon="file-text" label="Terms & Privacy Policy" onPress={() => {}} isLast />
           </View>
 
-          {/* Log Out */}
           {user && (
             <View
               style={{

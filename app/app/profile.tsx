@@ -48,7 +48,6 @@ export default function ProfileScreen() {
         bounces={Platform.OS === 'ios'}
       >
         <View style={{ maxWidth: 768, alignSelf: 'center', width: '100%' }}>
-          {/* Avatar & Name */}
           <View style={{ alignItems: 'center', marginTop: 8, marginBottom: 32 }}>
             <LinearGradient
               colors={['#3b82f6', '#8b5cf6']}
@@ -77,7 +76,6 @@ export default function ProfileScreen() {
             )}
           </View>
 
-          {/* Account Info Card */}
           <View
             style={{
               backgroundColor: 'rgba(255,255,255,0.05)',
@@ -136,7 +134,6 @@ export default function ProfileScreen() {
             </View>
           </View>
 
-          {/* Quick Actions Card */}
           <View
             style={{
               backgroundColor: 'rgba(255,255,255,0.05)',
